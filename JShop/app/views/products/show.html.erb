@@ -1,0 +1,39 @@
+<p>
+  <strong>Name:</strong>
+  <%= @product.name %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @product.price %>
+</p>
+
+<p>
+  <strong>Favorites:</strong>
+  <%= @product.favorites %>
+</p>
+
+<p>
+  <strong>Sales:</strong>
+  <%= @product.sales %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @product.description %>
+</p>
+
+<p>
+  <strong>Image dir:</strong>
+  <% if @product.image_dir.attached? %>
+    <img src="<%= (url_for(@product.image_dir)) %>">
+  <% end %>
+</p>
+
+<p>
+  <strong>Added time:</strong>
+  <%= @product.added_time %>
+</p>
+
+<%= link_to 'Edit', edit_product_path(@product) %> |
+<%= link_to 'Back', products_path %>
