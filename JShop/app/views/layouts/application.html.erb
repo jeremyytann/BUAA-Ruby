@@ -11,17 +11,21 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-light bg-white d-flex justify-content-end mt-2" style="min-width: 700px;">
+    <nav class="navbar navbar-light bg-white d-flex justify-content-end mt-2" style="min-width: 800px;">
       <div class="float-right d-flex flex-row-reverse">
         <!-- login buttons -->
         <% if user_signed_in? %>
-          <%= link_to destroy_user_session_path, method: :delete do %>
-            <button class="btn btn-outline-dark" type="submit" style="margin-right: 20px; text-decoration: none !important;">登出</button>
-          <% end %>
+          <div style="margin-left: 20px; margin-right: 20px; text-decoration: none !important;">
+            <%= link_to destroy_user_session_path, method: :delete do %>
+              <button class="btn btn-outline-dark" type="submit">登出</button>
+            <% end %>
+          </div>
 
-          <%= link_to edit_user_registration_path, method: :get do %>
-            <button class="btn btn-primary" type="submit" style="margin-right: 20px;"> <%= current_user.username %> </button>
-          <% end %>
+          <div>
+            <%= link_to edit_user_registration_path, method: :get do %>
+              <button class="btn btn-primary" type="submit"> <%= current_user.username %> </button>
+            <% end %>
+          </div>
         <% else %>
           <%= link_to new_user_session_path, method: :get do %>
               <button class="btn btn-outline-dark" type="submit" style="margin-right: 20px; text-decoration: none !important;">登录</button>
@@ -34,7 +38,7 @@
       </div>
     </nav>
 
-    <nav class="navbar navbar-light bg-white" style="min-width: 700px; border-bottom: 1px solid grey">
+    <nav class="navbar navbar-light bg-white" style="min-width: 800px; border-bottom: 1px solid grey">
       <a class="navbar-brand" href="/">
         <%= image_tag 'logo.png', style: 'height:40px; width:80px; margin-left: 20px;' %>
       </a>
@@ -51,18 +55,18 @@
             <div class="d-flex">
               <div class="d-flex align-items-center">
                 <!-- link to fav page later-->
-                <%= link_to new_user_session_path, method: :get do %>
+                <%= link_to favorites_path, method: :get do %>
                   <div>
-                    <%= image_tag 'heart.png', style: 'height:25px; width:25px; margin-right: 25px;' %>
+                    <%= image_tag 'heart.png', style: 'height:25px; width:25px;' %>
                   </div>
                 <% end %>
               </div>
 
-              <div>
+              <div style="margin-right: 25px; margin-left: 25px;">
                 <!-- link to cart page later-->
-                <%= link_to new_user_session_path, method: :get do %>
+                <%= link_to carts_path, method: :get do %>
                   <div>
-                    <%= image_tag 'cart.png', style: 'height:25px; width:25px; margin-right: 25px;' %>
+                    <%= image_tag 'cart.png', style: 'height:25px; width:25px;' %>
                   </div>
                 <% end %>
               </div>
@@ -74,16 +78,16 @@
                 <!-- link to add item page later-->
                 <%= link_to new_product_path, method: :get do %>
                   <div>
-                    <%= image_tag 'plus.png', style: 'height:20px; width:20px; margin-right: 25px;' %>
+                    <%= image_tag 'plus.png', style: 'height:20px; width:20px;' %>
                   </div>
                 <% end %>
               </div>
 
-              <div>
+              <div style="margin-right: 25px; margin-left: 25px;">
                 <!-- link to order list page later-->
                 <%= link_to new_user_session_path, method: :get do %>
                   <div>
-                    <%= image_tag 'order.png', style: 'height:25px; width:25px; margin-right: 25px;' %>
+                    <%= image_tag 'order.png', style: 'height:25px; width:25px;' %>
                   </div>
                 <% end %>
               </div>
@@ -97,15 +101,15 @@
             <div class="d-flex align-items-center">
               <%= link_to new_user_session_path, method: :get do %>
                 <div>
-                  <%= image_tag 'heart.png', style: 'height:25px; width:25px; margin-right: 25px;' %>
+                  <%= image_tag 'heart.png', style: 'height:25px; width:25px;' %>
                 </div>
               <% end %>
             </div>
 
-            <div>
+            <div style="margin-right: 25px; margin-left: 25px;">
               <%= link_to new_user_session_path, method: :get do %>
                 <div>
-                  <%= image_tag 'cart.png', style: 'height:25px; width:25px; margin-right: 25px;' %>
+                  <%= image_tag 'cart.png', style: 'height:25px; width:25px;' %>
                 </div>
               <% end %>
             </div>
@@ -119,7 +123,7 @@
     
     <%= yield %>
 
-    <nav class="navbar navbar-light bg-white d-flex justify-content-center" style="height: 80px; min-width: 700px; border-top: 1px solid grey">
+    <nav class="navbar navbar-light bg-white d-flex justify-content-center" style="height: 80px; min-width: 800px; border-top: 1px solid grey">
       <p style="color:grey">JShop by 79066013 陈嘉骏</p>
     </nav>
   </body>

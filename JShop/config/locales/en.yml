@@ -31,3 +31,47 @@
 
 en:
   hello: "Hello world"
+
+  datetime:
+      distance_in_words:
+        about_x_hours:
+          one: 近 1 小时
+          other: 近 %{count} 小时
+        about_x_months:
+          one: 近 1 个月
+          other: 近 %{count} 个月
+        about_x_years:
+          one: 近 1 年
+          other: 近 %{count} 年
+        almost_x_years:
+          one: 快 1 年
+          other: 快 %{count} 年
+        half_a_minute: 半分钟
+        less_than_x_minutes:
+          one: 少于 1 分钟
+          other: 少于 %{count} 分钟
+        less_than_x_seconds:
+          one: 少于 1 秒
+          other: 少于 %{count} 秒
+        over_x_years:
+          one: 超过 1 年
+          other: 超过 %{count} 年
+        x_days:
+          one: 1 天
+          other: "%{count} 天"
+        x_minutes:
+          one: 1 分钟
+          other: "%{count} 分钟"
+        x_months:
+          one: 1 个月
+          other: "%{count} 个月"
+        x_seconds:
+          one: 1 秒
+          other: "%{count} 秒"
+      prompts:
+        day: 天
+        hour: 小时
+        minute: 分钟
+        month: 个月
+        second: 秒
+        year: 年

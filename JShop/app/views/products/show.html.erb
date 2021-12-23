@@ -1,39 +1,87 @@
-<p>
-  <strong>Name:</strong>
-  <%= @product.name %>
-</p>
+<div class="mx-5" style="min-width: 700px">
+  <div class="d-flex flex-column justify-content-center my-5 mb-4"
+    style="background-color: #F5F5F5; border-radius: 20px;">
+    <div class="m-4 d-flex flex-column">
+      <div class="d-flex">
+        <div class="me-2">
+          <% if @product.image_dir.attached? %>
+            <img src="<%= (url_for(@product.image_dir)) %>" style="height: 20rem; width: 20rem; border-radius: 20px;">
+          <% end %>
+        </div>
 
-<p>
-  <strong>Price:</strong>
-  <%= @product.price %>
-</p>
+        <div class="ms-4 mt-1 d-flex flex-column">
+          <div style="height: 50px;">
+            <p style="font-size: 30px;">
+              <%= @product.name %>
+            </p>
+          </div>
 
-<p>
-  <strong>Favorites:</strong>
-  <%= @product.favorites %>
-</p>
+          <div>
+            <p class="ms-1 mt-1" style="font-size: 22px;">
+              ¥ <%= @product.price.to_f %>
+            </p>
+          </div>
 
-<p>
-  <strong>Sales:</strong>
-  <%= @product.sales %>
-</p>
+          <div class="d-flex align-items-center">
+            <div class="me-3">
+              <%= link_to carts_path(:user_id => current_user.id, :product_id => @product.id, :quantity => 1), method: :post do %>
+                <button class="btn" style="background-color: tan;"> 
+                  <div>
+                    <%= image_tag 'white-cart.png', style: 'height:23px; width:23px;' %>
+                  </div>
+                </button>
+              <% end %>
+            </div>
 
-<p>
-  <strong>Description:</strong>
-  <%= @product.description %>
-</p>
+            <div>
+              <%= link_to favorites_path(:user_id => current_user.id, :product_id => @product.id), method: :post do %>
+                <button class="btn" style="background-color:pink; ">
+                  <div>
+                    <%= image_tag 'fav.png', style: 'height:23px; width:23px;' %>
+                  </div>
+                </button>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+   </div>
+  </div>
 
-<p>
-  <strong>Image dir:</strong>
-  <% if @product.image_dir.attached? %>
-    <img src="<%= (url_for(@product.image_dir)) %>">
-  <% end %>
-</p>
+  <div class="d-flex flex-column mb-5"
+    style="background-color: #F5F5F5; border-radius: 20px;">
+    <div class="m-4 mb-2 d-flex flex-column">
+      <div class="mb-4 d-flex align-items-center">
+        <button class="btn me-4" style="background-color: #C4DFFB; cursor: default;"> 
+          <div>
+            <%= image_tag 'store.png', style: 'height:23px; width:23px; margin-right: 5px;' %>
+            <%= @product.seller_username %>
+          </div>
+        </button>
 
-<p>
-  <strong>Added time:</strong>
-  <%= @product.added_time %>
-</p>
+        <%= image_tag 'clock.png', style: 'height:16px; width:16px; margin-right: 8px;' %>
+        <div style="color: grey; font-size: 15px;">
+        <%= time_ago_in_words @product.created_at %>
+        </div>
+      </div>
 
-<%= link_to 'Edit', edit_product_path(@product) %> |
-<%= link_to 'Back', products_path %>
+      <h4>商品详情</h4>
+
+      <p class="mt-2">
+        <strong>收藏人数：</strong>
+        <%= @product.favorites %>
+      </p>
+
+      <p>
+        <strong>已售出：</strong>
+        <%= @product.sales %>
+      </p>
+
+
+      <h4 class="mt-4">商品描述</h4>
+      <p class="mt-2">
+        <%= @product.description %>
+      </p>
+    </div>
+  </div>
+</div>

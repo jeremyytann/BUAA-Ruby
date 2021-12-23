@@ -1,0 +1,59 @@
+<h2 class="ms-5 mt-5 mb-4">收藏</h2>
+
+<div class="mx-5 mb-5" style="min-width: 700px">
+  <div class="d-flex flex-column mb-5"
+    style="background-color: #F5F5F5; border-radius: 20px;">
+    <div class="m-4 d-flex flex-column">
+      <div class="d-flex mx-3">
+        <h4 style="font-size: 25px; margin-top: 4px;"> 商品 </h4>
+        <span style="font-size: 25px; color: grey; margin-left: 30px;"> 商家 </span>
+      </div>
+
+      <div class="d-flex flex-column mx-3 mb-3">
+        <% @owned_favorites.each do |favorite| %>
+          <div class="d-flex" style="border-radius: 20px; margin-top: 30px;">
+            <% @fav_product = Product.find_by(id: favorite.product_id) %>
+            
+            <div>
+              <%= link_to @fav_product do %>
+                <% if @fav_product.image_dir.attached? %>
+                  <img src="<%= (url_for(@fav_product.image_dir)) %>" style="height: 10rem; width: 10rem; border-radius: 15px; border: 1px solid black;">
+                <% end %>
+              <% end %>
+            </div>
+
+            <div class="d-flex flex-column mx-4 my-1">
+              <div>
+                <%= link_to @fav_product, :style => "color: black; text-decoration: none;" do %>
+                  <h4><%= @fav_product.name %></h4>
+                <% end %>
+              </div>
+
+              <div class="mt-1">
+                <%= link_to @fav_product, :style => "color: black; text-decoration: none;" do %>
+                  <span style="font-size: 18px;"><%= @fav_product.description %></span>
+                <% end %>
+              </div>
+
+              <div class="mt-2 ms-1">
+                <%= link_to @fav_product, :style => "color: black; text-decoration: none;" do %>
+                  <span style="font-size: 18px;">¥ <%= @fav_product.price.to_f %></span>
+                <% end %>
+              </div>
+
+              <div class="mt-2">
+                <%= link_to favorite, method: :delete do %>
+                  <button class="btn" style="background-color:darkred;">
+                    <div>
+                      <%= image_tag 'bin.png', style: 'height:18px; width:18px;' %>
+                    </div>
+                  </button>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

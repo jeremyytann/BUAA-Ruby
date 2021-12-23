@@ -1,42 +1,54 @@
-<%= form_with(model: product) do |form| %>
-  <% if product.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
+<div class="mx-5 mb-5" style="min-width: 600px">
+  <div class="d-flex flex-column justify-content-center mt-4"
+    style="border: 1px solid black; border-radius: 20px;">
+    <div class="m-4" style="display: flex; flex-direction: column;">
+      <%= form_with(model: product) do |form| %>
+        <% if product.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
 
-      <ul>
-        <% product.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+            <ul>
+              <% product.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+              <% end %>
+            </ul>
+          </div>
         <% end %>
-      </ul>
-    </div>
-  <% end %>
 
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-  </div>
+        <div class="field">
+          <%= form.label "名称", :class => "mb-2" %>
+          <%= form.text_field :name, :class => "form-control mb-4", :required => 'required' %>
+        </div>
 
-  <div class="field">
-    <%= form.label :price %>
-    <%= form.text_field :price %>
-  </div>
+        <div class="field">
+          <%= form.label "价格", :class => "mb-2" %>
 
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_area :description %>
-  </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">¥</div>
+            </div>
+            <%= form.text_field :price, :class => "form-control mb-4", :required => 'required', :placeholder => "0.00" %>
+          </div>
+        </div>
 
-  <div class="field">
-    <%= form.label :image_dir %>
-    <%= form.file_field :image_dir %>
-  </div>
+        <div class="field">
+          <%= form.label "描述", :class => "mb-2" %>
+          <%= form.text_area :description, :class => "form-control mb-4", :required => 'required' %>
+        </div>
 
-  <div class="field">
-    <%= form.label :added_time %>
-    <%= form.text_field :added_time, :value => (Time.now) %>
-  </div>
+        <div class="field d-flex flex-column">
+          <%= form.label "上传图片", :class => "mb-2" %>
+          <%= form.file_field :image_dir, :class => "mb-4", :required => 'required' %>
+        </div>
 
-  <div class="actions">
-    <%= form.submit %>
+        <%= form.hidden_field :user_id, value: current_user.id %>
+        <%= form.hidden_field :seller_username, value: current_user.username %>
+        <%= form.hidden_field :added_time, value: (Time.now) %>
+
+        <div class="actions">
+          <%= form.submit "提交", :class => "btn btn-dark" %>
+        </div>
+      <% end %>
+   </div>
   </div>
-<% end %>
+</div>
