@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_23_194915) do
+ActiveRecord::Schema.define(version: 2021_12_24_083643) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -59,6 +59,17 @@ ActiveRecord::Schema.define(version: 2021_12_23_194915) do
     t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
+  create_table "orders", force: :cascade do |t|
+    t.integer "user_id"
+    t.decimal "deal_sum"
+    t.string "delivery_address"
+    t.string "delivery_name"
+    t.string "delivery_phone"
+    t.string "order_status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.decimal "price", precision: 10
@@ -72,6 +83,19 @@ ActiveRecord::Schema.define(version: 2021_12_23_194915) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_products_on_user_id"
+  end
+
+  create_table "s_orders", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "product_id"
+    t.integer "quantity"
+    t.decimal "price"
+    t.integer "order_id", null: false
+    t.integer "seller_id"
+    t.string "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["order_id"], name: "index_s_orders_on_order_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -98,4 +122,5 @@ ActiveRecord::Schema.define(version: 2021_12_23_194915) do
   add_foreign_key "favorites", "products"
   add_foreign_key "favorites", "users"
   add_foreign_key "products", "users"
+  add_foreign_key "s_orders", "orders"
 end

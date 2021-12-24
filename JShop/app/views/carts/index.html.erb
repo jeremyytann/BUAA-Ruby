@@ -76,10 +76,18 @@
       <h4 class="ms-4 mt-4 mb-3">付款金额</h4>
       <span class="ms-4" style="font-size: 25px;"> ¥ <%= @total_price %> </span>
 
-      <div class="ms-4 mt-3">
+      <div class="ms-4 mt-3 mb-4">
         <!-- make all products in carts into one main order -->
-        <%= link_to edit_user_registration_path, method: :get do %>
-          <button class="btn btn-primary" style="width: 100px;" type="submit"> 付款 </button>
+        <% if @owned_carts.size > 0 %>
+          <%= link_to orders_path(:user_id => current_user.id, :deal_sum => @total_price.to_f,
+              :delivery_address => current_user.address, :delivery_name => current_user.username,
+              :delivery_phone => current_user.phone_number, :order_status => "Paid"), method: :post do %>
+            <button class="btn btn-primary" style="width: 100px;" type="submit"> 
+              付款 
+            </button>
+          <% end %>
+        <% else %>
+          <button class="btn btn-secondary disabled" style="width: 100px; cursor: default;"> 付款 </button>
         <% end %>
       </div>
     </div>

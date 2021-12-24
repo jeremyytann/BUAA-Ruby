@@ -1,6 +1,7 @@
-<h1>Editing Product</h1>
-
-<%= render 'form', product: @product %>
-
-<%= link_to 'Show', @product %> |
-<%= link_to 'Back', products_path %>
+<% if current_user.role == 1 %>
+    <h2 class="ms-5 my-5">你不是商家，这样做是不行的哦！</h2>
+    <% redirect_back fallback_location: @product %>
+<% elsif current_user.role == 2 %>
+    <h2 class="ms-5 mt-5">修改商品</h2>
+    <%= render 'form', product: @product %>
+<% end %>

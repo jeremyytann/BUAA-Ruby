@@ -1,0 +1,37 @@
+<h2 class="ms-5 mt-5 mb-4">我的订单</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Product</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Order</th>
+      <th>Seller</th>
+      <th>Status</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @s_orders.each do |s_order| %>
+      <tr>
+        <td><%= s_order.user_id %></td>
+        <td><%= s_order.product_id %></td>
+        <td><%= s_order.quantity %></td>
+        <td><%= s_order.price %></td>
+        <td><%= s_order.order_id %></td>
+        <td><%= s_order.seller_id %></td>
+        <td><%= s_order.status %></td>
+        <td><%= link_to 'Show', s_order %></td>
+        <td><%= link_to 'Edit', edit_s_order_path(s_order) %></td>
+        <td><%= link_to 'Destroy', s_order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New S Order', new_s_order_path %>

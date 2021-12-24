@@ -1,6 +1,8 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[ show edit update destroy ]
   before_action :authenticate_user!, only: %i[ new create ]
+  before_action :check_seller, only: %i[ edit ]
+  before_action :check_seller_new, only: %i[ new ]
 
   # GET /products or /products.json
   def index
@@ -52,8 +54,32 @@ class ProductsController < ApplicationController
   def destroy
     @product.destroy
     respond_to do |format|
-      format.html { redirect_to products_url, notice: "Product was successfully destroyed." }
+      format.html { redirect_to root_path }
       format.json { head :no_content }
+    end
+  end
+
+  def check_seller
+    if user_signed_in?
+      if current_user.role == 1
+        redirect_to product_path
+      elsif current_user.role == 2
+        if @product.user_id != current_user.id
+          redirect_to product_path
+        end
+      end
+    else
+      redirect_to product_path
+    end
+  end
+
+  def check_seller_new
+    if user_signed_in?
+      if current_user.role == 1
+        redirect_to root_path
+      end
+    else
+      redirect_to root_path
     end
   end
 

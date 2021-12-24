@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @s_order.user_id %>
+</p>
+
+<p>
+  <strong>Product:</strong>
+  <%= @s_order.product_id %>
+</p>
+
+<p>
+  <strong>Quantity:</strong>
+  <%= @s_order.quantity %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @s_order.price %>
+</p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @s_order.order_id %>
+</p>
+
+<p>
+  <strong>Seller:</strong>
+  <%= @s_order.seller_id %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @s_order.status %>
+</p>
+
+<%= link_to 'Edit', edit_s_order_path(@s_order) %> |
+<%= link_to 'Back', s_orders_path %>

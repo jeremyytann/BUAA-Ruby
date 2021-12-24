@@ -1,0 +1,79 @@
+<div class="d-flex ms-5 mt-5">
+  <% if current_user.role == 1 %>
+    <%= link_to edit_user_registration_path, style: "text-decoration: none;", method: :get do %> 
+      <h2 class="me-4" style="color: grey;">个人资料</h2>
+    <% end %>
+  <% end %>
+  
+  <%= link_to orders_path, style: "text-decoration: none;", method: :get do %>
+    <h2 style="color: black;">所有订单</h2>
+  <% end %>
+</div>
+
+<div class="mx-5 mb-5" style="min-width: 700px">
+  <div class="d-flex flex-column justify-content-center mt-4"
+    style="background-color: #F5F5F5; border-radius: 20px;">
+    <div class="m-4 mb-0" style="display: flex; flex-direction: column;">
+      <% @orders.each do |order| %>
+        <% @s_orders = SOrder.where(order_id: order.id) %>
+        <% @s_order = @s_orders.first %>
+        <% @s_order_product = Product.find_by(id: @s_order.product_id) %>
+
+        <div class="d-flex ms-1 mb-4">
+          <%= link_to order, :style => "text-decoration: none; color: black;", method: :get do %>
+          <div class="d-flex flex-column">
+            <div class="ms-1 mb-2">
+              <span style="color: grey; font-size: 14px;"> 订单: </span>
+              <span style="color: grey; font-size: 15px;"><%= order.id %> | <%= order.created_at %> </span>
+            </div>
+
+            <div class="d-flex">
+              <div>
+                <img src="<%= (url_for(@s_order_product.image_dir)) %>" style="height: 8rem; width: 8rem; border-radius: 20px;" alt="...">
+              </div>
+
+              
+              <div class="d-flex flex-column ms-3">
+                <div class="mt-1 mb-2" style="font-size: 18px;">
+                  <span><%= @s_order_product.name %></span>
+                </div>
+
+                <div class="ms-1">
+                  <span>x<%= @s_order.quantity %></span>
+                </div>
+
+                <div class="ms-1 mt-2">
+                  <h5 style="font-size: 20px; color: #01528A">¥ <%= @s_order.price.to_f %></h5>
+                </div>
+
+                <div class="ms-1">
+                  <% if @s_order.status == "Paid" %>
+                    <span style="font-size: 14px; color: green">已付款</span>
+                  <% elsif @s_order.status == "Shipped" %>
+                    <span style="font-size: 14px; color: green">已出货，运输中</span>
+                  <% elsif @s_order.status == "Delivered" %>
+                    <span style="font-size: 14px; color: green">已签收</span>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+
+            <div class="ms-1 mt-2">
+              <span style="color: grey; font-size: 14px;">共 <%= @s_orders.size %> 件商品</span>
+            </div>
+
+            <div class="ms-1 mt-2 d-flex">
+              <h5 class="me-3">总付款: </h5>
+              <h5>¥ <%= order.deal_sum %> </h5>
+            </div>
+          </div>
+          <% end %>
+        </div>
+        
+      <% end %>
+
+    </div>
+  </div>
+</div>
+
+

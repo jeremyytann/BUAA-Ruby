@@ -1,6 +1,48 @@
 <div class="mx-5" style="min-width: 700px">
+  <% if user_signed_in? %>
+    <% if current_user.role == 2 %>
+      <% if @product.user_id == current_user.id %>
+        <div class="d-flex flex-column justify-content-center my-5 mb-4"
+            style="background-color: #F5F5F5; border-radius: 20px;">
+          <div class="m-4 d-flex flex-column">
+            <span class="ms-1"> 这是您所上架的商品。 </span>
+
+            <div class="d-flex align-items-center">
+              <%= link_to edit_product_path, method: :get do %>
+                <button class="btn mt-3" style="background-color: black;"> 
+                  <span style="color: white; font-size: 16px;"> 修改商品信息 </span>
+                </button>
+              <% end %>
+
+              <%= link_to @product, method: :delete do %>
+                <button class="btn ms-3 mt-3" style="background-color:darkred;">
+                  <span style="color: white; font-size: 16px;"> 删除商品 </span>
+                </button>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  <% end%>
+
+  <% if user_signed_in? %>
+    <% if current_user.role == 1 %>
   <div class="d-flex flex-column justify-content-center my-5 mb-4"
     style="background-color: #F5F5F5; border-radius: 20px;">
+    <% elsif current_user.role == 2 %>
+      <% if @product.user_id == current_user.id %>
+  <div class="d-flex flex-column justify-content-center mb-4"
+    style="background-color: #F5F5F5; border-radius: 20px;">
+      <% else %>
+  <div class="d-flex flex-column justify-content-center my-5 mb-4"
+    style="background-color: #F5F5F5; border-radius: 20px;">
+      <% end %>
+    <% end %>
+  <% else %>
+  <div class="d-flex flex-column justify-content-center my-5 mb-4"
+    style="background-color: #F5F5F5; border-radius: 20px;">
+  <% end %>
     <div class="m-4 d-flex flex-column">
       <div class="d-flex">
         <div class="me-2">
@@ -24,22 +66,58 @@
 
           <div class="d-flex align-items-center">
             <div class="me-3">
-              <%= link_to carts_path(:user_id => current_user.id, :product_id => @product.id, :quantity => 1), method: :post do %>
-                <button class="btn" style="background-color: tan;"> 
-                  <div>
-                    <%= image_tag 'white-cart.png', style: 'height:23px; width:23px;' %>
-                  </div>
-                </button>
+              <% if user_signed_in? %>
+                <% if current_user.role == 1 %>
+                  <%= link_to carts_path(:user_id => current_user.id, :product_id => @product.id, :quantity => 1), method: :post do %>
+                    <button class="btn" style="background-color: tan;"> 
+                      <div>
+                        <%= image_tag 'white-cart.png', style: 'height:23px; width:23px;' %>
+                      </div>
+                    </button>
+                  <% end %>
+                <% elsif current_user.role == 2 %>
+                  <button class="btn" style="background-color: tan; cursor: default;"> 
+                    <div>
+                      <%= image_tag 'white-cart.png', style: 'height:23px; width:23px;' %>
+                    </div>
+                  </button>
+                <% end %>
+              <% else %>
+                <%= link_to new_user_session_path, method: :get do %>
+                  <button class="btn" style="background-color: tan;"> 
+                    <div>
+                      <%= image_tag 'white-cart.png', style: 'height:23px; width:23px;' %>
+                    </div>
+                  </button>
+                <% end %>
               <% end %>
             </div>
 
             <div>
-              <%= link_to favorites_path(:user_id => current_user.id, :product_id => @product.id), method: :post do %>
-                <button class="btn" style="background-color:pink; ">
-                  <div>
-                    <%= image_tag 'fav.png', style: 'height:23px; width:23px;' %>
-                  </div>
-                </button>
+              <% if user_signed_in? %>
+                <% if current_user.role == 1 %>
+                  <%= link_to favorites_path(:user_id => current_user.id, :product_id => @product.id), method: :post do %>
+                    <button class="btn" style="background-color: pink;"> 
+                      <div>
+                        <%= image_tag 'fav.png', style: 'height:23px; width:23px;' %>
+                      </div>
+                    </button>
+                  <% end %>
+                <% elsif current_user.role == 2 %>
+                  <button class="btn" style="background-color: pink; cursor: default;"> 
+                    <div>
+                      <%= image_tag 'fav.png', style: 'height:23px; width:23px;' %>
+                    </div>
+                  </button>
+                <% end %>
+              <% else %>
+                <%= link_to new_user_session_path, method: :get do %>
+                  <button class="btn" style="background-color:pink; ">
+                    <div>
+                      <%= image_tag 'fav.png', style: 'height:23px; width:23px;' %>
+                    </div>
+                  </button>
+                <% end %>
               <% end %>
             </div>
           </div>

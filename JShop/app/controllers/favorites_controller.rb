@@ -1,5 +1,7 @@
 class FavoritesController < ApplicationController
   before_action :set_favorite, only: %i[ show edit update destroy ]
+  before_action :check_for_same?, only: %i[ new create ]
+  before_action :check_buyer, only: %i[ index ]
 
   # GET /favorites or /favorites.json
   def index
@@ -25,6 +27,10 @@ class FavoritesController < ApplicationController
 
   # POST /favorites or /favorites.json
   def create
+    if @already
+      return
+    end
+
     @favorite = Favorite.new(favorite_params)
 
     respond_to do |format|
@@ -56,6 +62,19 @@ class FavoritesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to favorites_url, notice: "Favorite was successfully destroyed." }
       format.json { head :no_content }
+    end
+  end
+
+  def check_for_same?
+    if Favorite.find_by(user_id: params[:user_id], product_id: params[:product_id])
+      @already = true
+      return
+    end
+  end
+
+  def check_buyer
+    if current_user.role == 2
+      redirect_to root_path
     end
   end
 
