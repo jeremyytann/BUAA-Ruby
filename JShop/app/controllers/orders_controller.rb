@@ -7,7 +7,9 @@ class OrdersController < ApplicationController
   # GET /orders or /orders.json
   def index
     if current_user.role == 1
-      @orders = Order.where(user_id: current_user.id)
+      @orders = Order.where(user_id: current_user.id).reverse
+    else
+      redirect_to root_path
     end
   end
 
@@ -22,6 +24,30 @@ class OrdersController < ApplicationController
 
   # GET /orders/1/edit
   def edit
+  end
+  
+  # Cancel every s_orders
+  def is_cancelled
+    @order = Order.find(params[:id])
+    @s_orders = SOrder.where(order_id: @order.id)
+
+    @s_orders.each do |s_order|
+      s_order.update(status: "Cancelled")
+    end
+
+    redirect_back(fallback_location: @order)
+  end
+
+  # Complete every s_orders
+  def is_completed
+    @order = Order.find(params[:id])
+    @s_orders = SOrder.where(order_id: @order.id)
+
+    @s_orders.each do |s_order|
+      s_order.update(status: "Completed")
+    end
+
+    redirect_back(fallback_location: @order)
   end
 
   # POST /orders or /orders.json
@@ -62,7 +88,7 @@ class OrdersController < ApplicationController
   def destroy
     @order.destroy
     respond_to do |format|
-      format.html { redirect_to orders_url, notice: "Order was successfully destroyed." }
+      format.html { redirect_to orders_url }
       format.json { head :no_content }
     end
   end

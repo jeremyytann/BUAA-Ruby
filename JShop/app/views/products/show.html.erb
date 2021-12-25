@@ -8,17 +8,21 @@
             <span class="ms-1"> 这是您所上架的商品。 </span>
 
             <div class="d-flex align-items-center">
-              <%= link_to edit_product_path, method: :get do %>
-                <button class="btn mt-3" style="background-color: black;"> 
-                  <span style="color: white; font-size: 16px;"> 修改商品信息 </span>
-                </button>
-              <% end %>
+              <div>
+                <%= link_to edit_product_path, method: :get do %>
+                  <button class="btn mt-3" style="background-color: black;"> 
+                    <span style="color: white; font-size: 16px;"> 修改商品信息 </span>
+                  </button>
+                <% end %>
+              </div>
 
-              <%= link_to @product, method: :delete do %>
-                <button class="btn ms-3 mt-3" style="background-color:darkred;">
-                  <span style="color: white; font-size: 16px;"> 删除商品 </span>
-                </button>
-              <% end %>
+              <div>
+                <%= link_to @product, method: :delete, data: {confirm: "你确定吗？"} do %>
+                  <button class="btn ms-3 mt-3" style="background-color:darkred;">
+                    <span style="color: white; font-size: 16px;"> 删除商品 </span>
+                  </button>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>
@@ -93,7 +97,7 @@
               <% end %>
             </div>
 
-            <div>
+            <div class="me-3">
               <% if user_signed_in? %>
                 <% if current_user.role == 1 %>
                   <%= link_to favorites_path(:user_id => current_user.id, :product_id => @product.id), method: :post do %>
@@ -120,6 +124,35 @@
                 <% end %>
               <% end %>
             </div>
+
+            <div>
+              <!-- todo report button-->
+              <% if user_signed_in? %>
+                <% if current_user.role == 1 %>
+                    <!-- links todo -->
+                    <button class="btn" type="button" data-toggle="modal" data-target="#exampleModalCenter" style="background-color: darkred;"> 
+                      <div>
+                        <%= image_tag 'report.png', style: 'height:23px; width:23px;' %>
+                      </div>
+                    </button>
+
+                <% elsif current_user.role == 2 %>
+                  <button class="btn" style="background-color: darkred; cursor: default;"> 
+                    <div>
+                      <%= image_tag 'report.png', style: 'height:23px; width:23px;' %>
+                    </div>
+                  </button>
+                <% end %>
+              <% else %>
+                <%= link_to new_user_session_path, method: :get do %>
+                  <button class="btn" style="background-color: darkred; ">
+                    <div>
+                      <%= image_tag 'report.png', style: 'height:23px; width:23px;' %>
+                    </div>
+                  </button>
+                <% end %>
+              <% end %>
+            </div>
           </div>
         </div>
       </div>
@@ -130,12 +163,16 @@
     style="background-color: #F5F5F5; border-radius: 20px;">
     <div class="m-4 mb-2 d-flex flex-column">
       <div class="mb-4 d-flex align-items-center">
-        <button class="btn me-4" style="background-color: #C4DFFB; cursor: default;"> 
-          <div>
-            <%= image_tag 'store.png', style: 'height:23px; width:23px; margin-right: 5px;' %>
-            <%= @product.seller_username %>
-          </div>
-        </button>
+        <% @product_shop = Shop.find_by(user_id: @product.user_id) %>
+
+        <%= link_to @product_shop, method: :get do %>
+          <button class="btn me-4" style="background-color: #C4DFFB;"> 
+            <div>
+              <%= image_tag 'store.png', style: 'height:23px; width:23px; margin-right: 5px;' %>
+              <%= @product.seller_username %>
+            </div>
+          </button>
+        <% end %>
 
         <%= image_tag 'clock.png', style: 'height:16px; width:16px; margin-right: 8px;' %>
         <div style="color: grey; font-size: 15px;">
@@ -147,7 +184,7 @@
 
       <p class="mt-2">
         <strong>收藏人数：</strong>
-        <%= @product.favorites %>
+        <%= @product.favorites.count %>
       </p>
 
       <p>

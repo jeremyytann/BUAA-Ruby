@@ -1,0 +1,263 @@
+<div class="d-flex m-5" style="min-width: 700px;">
+  <div class="d-flex flex-column" style="width: 20%; min-width: 250px; height: auto;">
+    <div class="d-flex flex-column" style="border-radius: 20px; background-color: #F5F5F5;">
+      <% @shop_owner = User.find_by(id: @shop.user_id) %>
+      <div class="d-flex justify-content-center mt-4">
+        <div>
+          <h4> <%= @shop_owner.username %> </h4>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <div>
+          <%= @shop_owner.created_at %>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <div class="d-flex mt-2 mb-2">
+          <h5 class="mt-1 me-3" style="font-size: 15px;"> 关注人数: </h5>
+          <!-- get followship counts -->
+          <% @following_count = Followship.where(shop_id: @shop.id).count %>
+          <span style="font-size: 16px; margin-top: 1px;"> <%= @following_count %> </span>
+        </div>
+      </div>
+
+      <div class="d-flex mt-1 align-items-center justify-content-center" style="margin-bottom: 35px;">
+        <div class="d-flex me-3">
+          <% if user_signed_in? %>
+            <% if current_user.role == 1 %>
+              <% @get_followship = Followship.where(user_id: current_user.id, shop_id: @shop.id).any? %>
+
+              <% if !@get_followship %>
+                <%= link_to followships_path(:user_id => current_user.id, :shop_id => @shop.id), method: :post do %>
+                  <button class="btn" style="background-color: #ACD1FB;"> 
+                    <div>
+                      <span style="color: white;"> 关注 </span>
+                    </div>
+                  </button>
+                <% end %>
+              <% else %>
+                <% @current_followshop = Followship.find_by(user_id: current_user.id, shop_id: @shop.id) %>
+                <%= link_to @current_followshop, method: :delete do %>
+                  <button class="btn" style="background-color: #F6CADC;"> 
+                    <div>
+                      <span style="color: white;"> 取消关注 </span>
+                    </div>
+                  </button>
+                <% end %>
+              <% end %>
+            <% elsif current_user.role == 2 %>
+              <button class="btn" style="background-color: #ACD1FB;"> 
+                <div>
+                  <span style="color: white;"> 关注 </span>
+                </div>
+              </button>
+            <% elsif current_user.role == 3 %>
+              <button class="btn" style="background-color: #ACD1FB;"> 
+                <div>
+                  <span style="color: white;"> 关注 </span>
+                </div>
+              </button>
+            <% end %>
+          <% else %>
+            <%= link_to new_user_session_path, method: :get do %>
+              <button class="btn" style="background-color: #ACD1FB;"> 
+                <div>
+                  <span style="color: white;"> 关注 </span>
+                </div>
+              </button>
+            <% end %>
+          <% end %>
+        </div>
+
+        <div class="d-flex">
+          <% if user_signed_in? %>
+            <% if current_user.role == 1 %>
+              
+                <button class="btn" style="background-color: darkred;"> 
+                  <div>
+                    <span style="color: white;"> 举报 </span>
+                  </div>
+                </button>
+
+            <% elsif current_user.role == 2 %>
+              <button class="btn" style="background-color: darkred;"> 
+                <div>
+                  <span style="color: white;"> 举报 </span>
+                </div>
+              </button>
+            <% elsif current_user.role == 3 %>
+              <button class="btn" style="background-color: darkred;"> 
+                <div>
+                  <span style="color: white;"> 举报 </span>
+                </div>
+              </button>
+            <% end %>
+          <% else %>
+            <%= link_to new_user_session_path, method: :get do %>
+              <button class="btn" style="background-color: darkred;"> 
+                <div>
+                  <span style="color: white;"> 举报 </span>
+                </div>
+              </button>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex flex-column" style="margin-left: 3%; width: 77%; background-color: #F5F5F5; border-radius: 20px;">
+    <!-- right display part -->
+    <div class="m-4">
+      <!-- Nav pills -->
+      <div class="ms-3 mt-2">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="pill" href="#home">主页</a>
+          </li>
+          <li class="nav-item ms-3">
+            <a class="nav-link" data-bs-toggle="pill" href="#menu1">所有商品</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div class="tab-pane ms-3 mt-3 active" id="home">
+          <!-- topsales products && latest products -->
+          <div class="mb-4" style="margin-top: 35px;">
+            <h3> 热销榜 </h3>
+          </div>
+
+          <% @shop_products = Product.where(user_id: @shop.user_id) %>
+          <% @ranked_products = (@shop_products.sort_by &:sales).first(10) %>
+          <div class="d-flex flex-column mt-2">
+            <% count = 1 %>
+            <% @ranked_products.each do |ranked_product| %>
+              <div class="d-flex mb-4">
+                <div class="me-3 mt-1">
+                  <div class="d-flex justify-content-center" style="background-color: #B8D0EB; border-radius: 10px; width: 20px;">
+                    <span><%= count %></span>
+                  </div>
+                  <% count = count + 1 %>
+                </div>
+
+                <div>
+                  <%= link_to ranked_product, method: :get do %>
+                    <img src="<%= (url_for(ranked_product.image_dir)) %>" style="height: 8rem; width: 8rem; border-radius: 20px;" alt="...">
+                  <% end %>
+                </div>
+
+                <div class="ms-3 my-2 d-flex flex-column">
+                  <div>
+                    <%= link_to ranked_product, style: "text-decoration: none; color: black;", method: :get do %>
+                      <h5 style="font-size: 20px;"> <%= ranked_product.name%> </h5>
+                    <% end %>
+                  </div>
+
+                  <div>
+                    <%= link_to ranked_product, style: "text-decoration: none; color: black;", method: :get do %>
+                      <span> <%= ranked_product.description %> </span>
+                    <% end %>
+                  </div>
+
+                  <div class="mt-1">
+                    <%= link_to ranked_product, style: "text-decoration: none; color: black;", method: :get do %>
+                      <span>¥ <%= ranked_product.price.to_f %> </span>
+                    <% end %>
+                  </div>
+
+                  <div class="mt-1">
+                    <%= link_to ranked_product, style: "text-decoration: none; color: black;", method: :get do %>
+                      <span style="font-size: 14px;">已售出:  <%= ranked_product.sales %></span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="mt-4 mb-4">
+            <h3> 新上架商品 </h3>
+          </div>
+
+          <% @latest_products = (@shop_products.sort_by &:created_at).reverse.first(10) %>
+          
+          <div class="d-flex flex-column mt-2">
+            <% count = 1 %>
+            <% @latest_products.each do |latest_product| %>
+              <div class="d-flex mb-4">
+                <div class="me-3 mt-1">
+                  <div class="d-flex justify-content-center" style="background-color: #B8D0EB; border-radius: 10px; width: 20px;">
+                    <span><%= count %></span>
+                  </div>
+                  <% count = count + 1 %>
+                </div>
+
+                <div>
+                  <%= link_to latest_product, method: :get do %>
+                    <img src="<%= (url_for(latest_product.image_dir)) %>" style="height: 8rem; width: 8rem; border-radius: 20px;" alt="...">
+                  <% end %>
+                </div>
+
+                <div class="ms-3 my-2 d-flex flex-column">
+                  <div>
+                    <%= link_to latest_product, style: "text-decoration: none; color: black;", method: :get do %>
+                      <h5 style="font-size: 20px;"> <%= latest_product.name%> </h5>
+                    <% end %>
+                  </div>
+
+                  <div>
+                    <%= link_to latest_product, style: "text-decoration: none; color: black;", method: :get do %>
+                      <span> <%= latest_product.description %> </span>
+                    <% end %>
+                  </div>
+
+                  <div class="mt-1">
+                    <%= link_to latest_product, style: "text-decoration: none; color: black;", method: :get do %>
+                      <span>¥ <%= latest_product.price.to_f %> </span>
+                    <% end %>
+                  </div>
+
+                  <div class="mt-1 d-flex align-items-center">
+                    <%= image_tag 'clock.png', style: 'height:16px; width:16px; margin-right: 8px;' %>
+                    <%= link_to latest_product, style: "text-decoration: none; color: black;", method: :get do %> 
+                      <span style="font-size: 14px; color: grey;"><%= time_ago_in_words latest_product.created_at %></span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="tab-pane ms-1 fade" style="margin-top: 35px;" id="menu1">
+          <!-- all products -->
+          <div class="d-flex flex-wrap" style="margin-top: 30px; margin-left: 10px;">
+            <% @shop_products.each do |shop_product| %>
+              <div class="d-flex flex-column mb-4" style="margin-right: 30px;">
+                <div>
+                  <%= link_to shop_product, method: :get do %>
+                    <img src="<%= (url_for(shop_product.image_dir)) %>" style="height: 9.5rem; width: 9.5rem; border-radius: 20px;" alt="...">
+                  <% end %>
+                </div>
+
+                <div class="ms-3 mt-3 d-flex flex-column">
+                  <%= link_to shop_product, style: "text-decoration: none; color: black;", method: :get do %>
+                    <h5 style="font-size: 20px;"> <%= shop_product.name%> </h5>
+                  <% end %>
+
+                  <%= link_to shop_product, style: "text-decoration: none; color: black;", method: :get do %>
+                    <span>¥ <%= shop_product.price.to_f %> </span>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

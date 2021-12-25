@@ -3,7 +3,18 @@ class SOrdersController < ApplicationController
 
   # GET /s_orders or /s_orders.json
   def index
-    @s_orders = SOrder.where(seller_id: current_user.id)
+    if user_signed_in?
+      if current_user.role == 2
+        @s_orders = SOrder.where(seller_id: current_user.id)
+        @paid_orders = @s_orders.where(status: "Paid")
+        @shipped_orders = @s_orders.where(status: "Shipped").reverse
+        @delivered_orders = @s_orders.where(status: "Delivered").reverse
+        @completed_orders = @s_orders.where(status: "Completed").reverse
+        @cancelled_orders = @s_orders.where(status: "Cancelled").reverse
+      elsif current_user.role == 1
+        redirect_to root_path
+      end
+    end
   end
 
   # GET /s_orders/1 or /s_orders/1.json
@@ -56,6 +67,19 @@ class SOrdersController < ApplicationController
     end
   end
 
+  def is_shipped
+    @s_order = SOrder.find(params[:id])
+    @s_order.update(status: "Shipped")
+    redirect_to s_orders_url
+  end
+
+  def is_delivered
+    @s_order = SOrder.find(params[:id])
+    @new_delivery = Delivery.create(s_order_id: @s_order.id, postman_name: params[:postman_name])
+    @s_order.update(status: "Delivered")
+    redirect_to root_path
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_s_order
@@ -64,6 +88,6 @@ class SOrdersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def s_order_params
-      params.require(:s_order).permit(:user_id, :product_id, :quantity, :price, :order_id, :seller_id, :status)
+      params.require(:s_order).permit(:user_id, :product_id, :quantity, :price, :order_id, :seller_id, :status, :postman_name)
     end
 end

@@ -1,3 +1,11 @@
 // Place all the styles related to the s_orders controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
+
+.nav-item a {
+    color: grey;
+}
+
+.nav-item a:hover {
+    color: black;
+}

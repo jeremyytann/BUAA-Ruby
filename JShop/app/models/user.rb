@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :products, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :orders, dependent: :destroy
+  has_one :shop, dependent: :destroy
 
   validates :username, presence: true, uniqueness: { case_sensitive: false }
   validates_format_of :username, with: /^[a-zA-Z0-9_\.]*$/, :multiline => true

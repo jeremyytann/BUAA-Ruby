@@ -43,10 +43,34 @@
         <%= image_tag 'logo.png', style: 'height:40px; width:80px; margin-left: 20px;' %>
       </a>
 
-      <form class="form-inline d-flex align-items-center">
-        <input class="form-control" style="height: 40px;" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 mx-3 ml-3" type="submit">Search</button>
-      </form>
+      <% if user_signed_in? %>
+        <% if current_user.role == 1 %>
+          <div>
+            <form class="form-inline d-flex align-items-center">
+              <input class="form-control" style="height: 40px;" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success my-2 mx-3 ml-3" type="submit">Search</button>
+            </form>
+          </div>
+        <% elsif current_user.role == 2 %>
+          <% @owned_shop = Shop.find_by(user_id: current_user.id) %>
+
+          <div>
+            <%= link_to @owned_shop, style: "color: grey; text-decoration: underline;", method: :get do %>
+              <span> 点此查看您的商店页面 </span>
+            <% end %>
+          </div>
+        <% elsif current_user.role == 4 %>
+
+        <% end %>
+      <% else %>
+        <div>
+          <form class="form-inline d-flex align-items-center">
+            <input class="form-control" style="height: 40px;" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 mx-3 ml-3" type="submit">Search</button>
+          </form>
+        </div>
+      <% end %>
+
 
       <div>
         <% if user_signed_in? %>
@@ -94,6 +118,11 @@
             </div>
           <% elsif current_user.role == 3 %>
             <!-- notifications -->
+
+          <% elsif current_user.role == 4 %>
+            <div class="d-flex">
+
+            </div>
           <% end %>
         <% else %>
           <!-- fav, cart, but login required -->

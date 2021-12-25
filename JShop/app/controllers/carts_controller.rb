@@ -31,6 +31,26 @@ class CartsController < ApplicationController
   def edit
   end
 
+  # quantity += 1
+  def inc_one
+    @cart = Cart.find(params[:id])
+    @cart.update(quantity: @cart.quantity + 1)
+
+    redirect_back(fallback_location: @cart)
+  end
+
+  # quantity -= 1
+  def dec_one
+    @cart = Cart.find(params[:id])
+    @cart.update(quantity: @cart.quantity - 1)
+
+    if @cart.quantity == 0
+      @cart.destroy
+    end
+
+    redirect_back(fallback_location: @cart)
+  end
+
   # POST /carts or /carts.json
   def create
     if @updated

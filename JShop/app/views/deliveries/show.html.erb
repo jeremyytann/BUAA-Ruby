@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>S order:</strong>
+  <%= @delivery.s_order_id %>
+</p>
+
+<p>
+  <strong>Postman name:</strong>
+  <%= @delivery.postman_name %>
+</p>
+
+<%= link_to 'Edit', edit_delivery_path(@delivery) %> |
+<%= link_to 'Back', deliveries_path %>

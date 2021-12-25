@@ -1,37 +1,362 @@
 <h2 class="ms-5 mt-5 mb-4">我的订单</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>User</th>
-      <th>Product</th>
-      <th>Quantity</th>
-      <th>Price</th>
-      <th>Order</th>
-      <th>Seller</th>
-      <th>Status</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div class="mx-5 mb-5" style="min-width: 700px">
+  <div class="d-flex flex-column justify-content-center mt-4"
+    style="background-color: #F5F5F5; border-radius: 20px;">
+    <div class="m-4 mb-0" style="display: flex; flex-direction: column;">
+      <!-- Nav pills -->
+      <div class="ms-3 mt-2" style="margin-bottom: 30px;">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="pill" href="#home">已付款</a>
+          </li>
+          <li class="nav-item ms-3">
+            <a class="nav-link" data-bs-toggle="pill" href="#menu1">已发货</a>
+          </li>
+          <li class="nav-item ms-3">
+            <a class="nav-link" data-bs-toggle="pill" href="#menu2">已签收</a>
+          </li>
+          <li class="nav-item ms-3">
+            <a class="nav-link" data-bs-toggle="pill" href="#menu3">已完成</a>
+          </li>
+          <li class="nav-item ms-3">
+            <a class="nav-link" data-bs-toggle="pill" href="#menu4">已取消</a>
+          </li>
+        </ul>
+      </div>
 
-  <tbody>
-    <% @s_orders.each do |s_order| %>
-      <tr>
-        <td><%= s_order.user_id %></td>
-        <td><%= s_order.product_id %></td>
-        <td><%= s_order.quantity %></td>
-        <td><%= s_order.price %></td>
-        <td><%= s_order.order_id %></td>
-        <td><%= s_order.seller_id %></td>
-        <td><%= s_order.status %></td>
-        <td><%= link_to 'Show', s_order %></td>
-        <td><%= link_to 'Edit', edit_s_order_path(s_order) %></td>
-        <td><%= link_to 'Destroy', s_order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div class="tab-pane active ms-3" id="home">
+          <!-- paid ones -->
+          <% if @paid_orders.size > 0 %>
+          <div style="margin-bottom: 35px;">
+          <% else %>
+          <div>
+          <% end %>
+            <% @paid_orders.each do |paid_order| %>
+              <% @paid_product = Product.find_by(id: paid_order.product_id) %>
 
-<br>
+              <div class="d-flex flex-column" style="margin-bottom: 25px;">
+                <div class="ms-1">
+                  <span style="color: grey; font-size: 12px;"> <%= paid_order.created_at %> </span>
+                </div>
 
-<%= link_to 'New S Order', new_s_order_path %>
+                <div class="ms-1 mb-2">
+                  <span style="color: grey; font-size: 14px;"> 子订单 id: </span>
+                  <span style="color: grey; font-size: 15px;"><%= paid_order.id %> |</span>
+                  
+                  <% if paid_order.status == "Paid" %>
+                    <span style="font-size: 13px; color: green">已付款</span>
+                  <% elsif paid_order.status == "Shipped" %>
+                    <span style="font-size: 13px; color: green">已发货</span>
+                  <% elsif paid_order.status == "Delivered" %>
+                    <span style="font-size: 13px; color: green">已签收</span>
+                  <% elsif paid_order.status == "Completed" %>
+                    <span style="font-size: 13px; color: green">已完成</span>
+                  <% end %>
+                </div>
+
+                <div class="d-flex">
+                  <div>
+                    <img src="<%= (url_for(@paid_product.image_dir)) %>" style="height: 9rem; width: 9rem; border-radius: 20px;" alt="...">
+                  </div>
+                  
+                  <div class="d-flex flex-column ms-3">
+                    <div class="mt-1 mb-2" style="font-size: 18px;">
+                      <span><%= @paid_product.name %></span>
+                    </div>
+
+                    <div class="ms-1">
+                      <span>x<%= paid_order.quantity %></span>
+                    </div>
+
+                    <div class="ms-1 mt-2">
+                      <h5 style="font-size: 20px; color: #01528A">¥ <%= paid_order.price.to_f %></h5>
+                    </div>
+
+                    <div class="mt-1">
+                      <%= link_to is_shipped_s_order_path(id: paid_order.id), method: :post do %>
+                        <button class="btn" style="background-color: #729B79; height: 35px;">
+                          <span style="color:white; font-size: 14px;"> 发货 </span>
+                        </button>
+                      <% end%>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex flex-column">
+                  <% @buyer = User.find_by(id: paid_order.user_id) %>
+
+                  <div class="ms-1 mt-2 d-flex flex-column">
+                    <span style="text-decoration: font-size: 16px;"> <%= @buyer.username %> </span>
+                    <span style="font-size: 13px; color: grey;"> <%= @buyer.phone_number %> </span>
+                    <span style="font-size: 13px; color: grey;"> <%= @buyer.address %> </span>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="tab-pane ms-3 fade" id="menu1">
+          <!-- shipped ones -->
+          <% if @shipped_orders.size > 0 %>
+          <div style="margin-bottom: 35px;">
+          <% else %>
+          <div>
+          <% end %>
+            <% @shipped_orders.each do |shipped_order| %>
+              <% @shipped_product = Product.find_by(id: shipped_order.product_id) %>
+
+              <div class="d-flex flex-column" style="margin-bottom: 25px;">
+                <div class="ms-1">
+                  <span style="color: grey; font-size: 12px;"> <%= shipped_order.created_at %> </span>
+                </div>
+
+                <div class="ms-1 mb-2">
+                  <span style="color: grey; font-size: 14px;"> 子订单 id: </span>
+                  <span style="color: grey; font-size: 15px;"><%= shipped_order.id %> |</span>
+                  
+                  <% if shipped_order.status == "Paid" %>
+                    <span style="font-size: 13px; color: green">已付款</span>
+                  <% elsif shipped_order.status == "Shipped" %>
+                    <span style="font-size: 13px; color: green">已发货</span>
+                  <% elsif shipped_order.status == "Delivered" %>
+                    <span style="font-size: 13px; color: green">已签收</span>
+                  <% elsif shipped_order.status == "Completed" %>
+                    <span style="font-size: 13px; color: green">已完成</span>
+                  <% end %>
+                </div>
+
+                <div class="d-flex">
+                  <div>
+                    <img src="<%= (url_for(@shipped_product.image_dir)) %>" style="height: 9rem; width: 9rem; border-radius: 20px;" alt="...">
+                  </div>
+                  
+                  <div class="d-flex flex-column ms-3">
+                    <div class="mt-1 mb-2" style="font-size: 18px;">
+                      <span><%= @shipped_product.name %></span>
+                    </div>
+
+                    <div class="ms-1">
+                      <span>x<%= shipped_order.quantity %></span>
+                    </div>
+
+                    <div class="ms-1 mt-2">
+                      <h5 style="font-size: 20px; color: #01528A">¥ <%= shipped_order.price.to_f %></h5>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex flex-column">
+                  <% @buyer = User.find_by(id: shipped_order.user_id) %>
+
+                  <div class="ms-1 mt-2 d-flex flex-column">
+                    <span style="text-decoration: font-size: 16px;"> <%= @buyer.username %> </span>
+                    <span style="font-size: 13px; color: grey;"> <%= @buyer.phone_number %> </span>
+                    <span style="font-size: 13px; color: grey;"> <%= @buyer.address %> </span>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="tab-pane ms-3 fade" id="menu2">
+          <!-- delivered ones -->
+          <% if @delivered_orders.size > 0 %>
+          <div style="margin-bottom: 35px;">
+          <% else %>
+          <div>
+          <% end %>
+            <% @delivered_orders.each do |delivered_order| %>
+              <% @delivered_product = Product.find_by(id: delivered_order.product_id) %>
+
+              <div class="d-flex flex-column" style="margin-bottom: 25px;">
+                <div class="ms-1">
+                  <span style="color: grey; font-size: 12px;"> <%= delivered_order.created_at %> </span>
+                </div>
+
+                <div class="ms-1 mb-2">
+                  <span style="color: grey; font-size: 14px;"> 子订单 id: </span>
+                  <span style="color: grey; font-size: 15px;"><%= delivered_order.id %> |</span>
+                  
+                  <% if delivered_order.status == "Paid" %>
+                    <span style="font-size: 13px; color: green">已付款</span>
+                  <% elsif delivered_order.status == "Shipped" %>
+                    <span style="font-size: 13px; color: green">已发货</span>
+                  <% elsif delivered_order.status == "Delivered" %>
+                    <span style="font-size: 13px; color: green">已签收</span>
+                  <% elsif delivered_order.status == "Completed" %>
+                    <span style="font-size: 13px; color: green">已完成</span>
+                  <% end %>
+                </div>
+
+                <div class="d-flex">
+                  <div>
+                    <img src="<%= (url_for(@delivered_product.image_dir)) %>" style="height: 9rem; width: 9rem; border-radius: 20px;" alt="...">
+                  </div>
+                  
+                  <div class="d-flex flex-column ms-3">
+                    <div class="mt-1 mb-2" style="font-size: 18px;">
+                      <span><%= @delivered_product.name %></span>
+                    </div>
+
+                    <div class="ms-1">
+                      <span>x<%= delivered_order.quantity %></span>
+                    </div>
+
+                    <div class="ms-1 mt-2">
+                      <h5 style="font-size: 20px; color: #01528A">¥ <%= delivered_order.price.to_f %></h5>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex flex-column">
+                  <% @buyer = User.find_by(id: delivered_order.user_id) %>
+
+                  <div class="ms-1 mt-2 d-flex flex-column">
+                    <span style="text-decoration: font-size: 16px;"> <%= @buyer.username %> </span>
+                    <span style="font-size: 13px; color: grey;"> <%= @buyer.phone_number %> </span>
+                    <span style="font-size: 13px; color: grey;"> <%= @buyer.address %> </span>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="tab-pane ms-3 fade" id="menu3">
+          <!-- completed ones -->
+          <% if @completed_orders.size > 0 %>
+          <div style="margin-bottom: 35px;">
+          <% else %>
+          <div>
+          <% end %>
+            <% @completed_orders.each do |completed_order| %>
+              <% @completed_product = Product.find_by(id: completed_order.product_id) %>
+
+              <div class="d-flex flex-column" style="margin-bottom: 25px;">
+                <div class="ms-1">
+                  <span style="color: grey; font-size: 12px;"> <%= completed_order.created_at %> </span>
+                </div>
+
+                <div class="ms-1 mb-2">
+                  <span style="color: grey; font-size: 14px;"> 子订单 id: </span>
+                  <span style="color: grey; font-size: 15px;"><%= completed_order.id %> |</span>
+                  
+                  <% if completed_order.status == "Paid" %>
+                    <span style="font-size: 13px; color: green">已付款</span>
+                  <% elsif completed_order.status == "Shipped" %>
+                    <span style="font-size: 13px; color: green">已发货</span>
+                  <% elsif completed_order.status == "Delivered" %>
+                    <span style="font-size: 13px; color: green">已签收</span>
+                  <% elsif completed_order.status == "Completed" %>
+                    <span style="font-size: 13px; color: green">已完成</span>
+                  <% end %>
+                </div>
+
+                <div class="d-flex">
+                  <div>
+                    <img src="<%= (url_for(@completed_product.image_dir)) %>" style="height: 9rem; width: 9rem; border-radius: 20px;" alt="...">
+                  </div>
+                  
+                  <div class="d-flex flex-column ms-3">
+                    <div class="mt-1 mb-2" style="font-size: 18px;">
+                      <span><%= @completed_product.name %></span>
+                    </div>
+
+                    <div class="ms-1">
+                      <span>x<%= completed_order.quantity %></span>
+                    </div>
+
+                    <div class="ms-1 mt-2">
+                      <h5 style="font-size: 20px; color: #01528A">¥ <%= completed_order.price.to_f %></h5>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex flex-column">
+                  <% @buyer = User.find_by(id: completed_order.user_id) %>
+
+                  <div class="ms-1 mt-2 d-flex flex-column">
+                    <span style="text-decoration: font-size: 16px;"> <%= @buyer.username %> </span>
+                    <span style="font-size: 13px; color: grey;"> <%= @buyer.phone_number %> </span>
+                    <span style="font-size: 13px; color: grey;"> <%= @buyer.address %> </span>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="tab-pane ms-3 fade" id="menu4">
+          <!-- cancelled ones -->
+          <% if @cancelled_orders.size > 0 %>
+          <div style="margin-bottom: 35px;">
+          <% else %>
+          <div>
+          <% end %>
+            <% @cancelled_orders.each do |cancelled_order| %>
+              <% @cancelled_product = Product.find_by(id: cancelled_order.product_id) %>
+
+              <div class="d-flex flex-column" style="margin-bottom: 25px;">
+                <div class="ms-1">
+                  <span style="color: grey; font-size: 12px;"> <%= cancelled_order.created_at %> </span>
+                </div>
+
+                <div class="ms-1 mb-2">
+                  <span style="color: grey; font-size: 14px;"> 子订单 id: </span>
+                  <span style="color: grey; font-size: 15px;"><%= cancelled_order.id %> |</span>
+                  
+                  <% if cancelled_order.status == "Paid" %>
+                    <span style="font-size: 13px; color: green">已付款</span>
+                  <% elsif cancelled_order.status == "Shipped" %>
+                    <span style="font-size: 13px; color: green">已发货</span>
+                  <% elsif cancelled_order.status == "Delivered" %>
+                    <span style="font-size: 13px; color: green">已签收</span>
+                  <% elsif cancelled_order.status == "Completed" %>
+                    <span style="font-size: 13px; color: green">已完成</span>
+                  <% elsif cancelled_order.status == "Cancelled" %>
+                    <span style="font-size: 13px; color: darkred">已取消</span>
+                  <% end %>
+                </div>
+
+                <div class="d-flex">
+                  <div>
+                    <img src="<%= (url_for(@cancelled_product.image_dir)) %>" style="height: 9rem; width: 9rem; border-radius: 20px;" alt="...">
+                  </div>
+                  
+                  <div class="d-flex flex-column ms-3">
+                    <div class="mt-1 mb-2" style="font-size: 18px;">
+                      <span><%= @cancelled_product.name %></span>
+                    </div>
+
+                    <div class="ms-1">
+                      <span>x<%= cancelled_order.quantity %></span>
+                    </div>
+
+                    <div class="ms-1 mt-2">
+                      <h5 style="font-size: 20px; color: #01528A">¥ <%= cancelled_order.price.to_f %></h5>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex flex-column">
+                  <% @buyer = User.find_by(id: cancelled_order.user_id) %>
+
+                  <div class="ms-1 mt-2 d-flex flex-column">
+                    <span style="text-decoration: font-size: 16px;"> <%= @buyer.username %> </span>
+                    <span style="font-size: 13px; color: grey;"> <%= @buyer.phone_number %> </span>
+                    <span style="font-size: 13px; color: grey;"> <%= @buyer.address %> </span>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

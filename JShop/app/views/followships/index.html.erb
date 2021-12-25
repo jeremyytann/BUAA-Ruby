@@ -1,0 +1,59 @@
+<h2 class="ms-5 mt-5 mb-4">收藏</h2>
+
+<div class="mx-5 mb-5" style="min-width: 700px">
+  <div class="d-flex flex-column mb-5"
+    style="background-color: #F5F5F5; border-radius: 20px;">
+    <div class="m-4 d-flex flex-column">
+      <div class="d-flex mx-3">
+        <%= link_to favorites_path, style: "text-decoration: none;", method: :get do %>
+          <h4 style="font-size: 25px; color: grey; margin-top: 4px;"> 商品 </h4>
+        <% end %>
+
+        <%= link_to followships_path, style: "text-decoration: none;", method: :get do %>
+          <h4 style="font-size: 25px; color: black; margin-left: 30px; margin-top: 4px;"> 商家 </h4>
+        <% end %>
+      </div>
+
+      <div class="d-flex flex-column mx-3 mb-3">
+        <% if !@followships.empty? %>
+          <!-- show followships -->
+          <% @followships.each do |followship| %>
+            <% @shop = Shop.find_by(id: followship.shop_id) %>
+            
+            <div class="d-flex" style="background-color: white; border-radius: 20px; border: 1px solid black; margin-top: 30px; height: 90px; width: 400px;">
+              <div class="d-flex flex-column m-3 me-0 ms-4" style="min-width: 260px;">
+                <div>
+                  <h5><%= @shop_name = User.find_by(id: @shop.user_id).username %></h5>
+                </div>
+
+                <div class="d-flex">
+                  <div class="mt-1">
+                    <h5 style="font-size: 15px; color: grey;"> 关注人数: </h5>
+                  </div>
+
+                  <div class="ms-2" style="margin-top: 1px;">
+                    <span style="color: grey;"><%= @count = Followship.where(shop_id: @shop.id).count %></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4">
+                <%= link_to followship, method: :delete do %>
+                  <button class="btn" style="background-color: #F6CADC; height: 40px; float: right;">
+                    取消关注
+                  </button>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+
+        <% else %>
+          <div class="mt-4">
+            <span style="color: grey;"> 您暂时还未关注任何商店哦！ </span>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>

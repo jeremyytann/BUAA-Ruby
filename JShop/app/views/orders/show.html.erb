@@ -76,15 +76,87 @@
                 <% if s_order.status == "Paid" %>
                   <span style="font-size: 14px; color: green">已付款</span>
                 <% elsif s_order.status == "Shipped" %>
-                  <span style="font-size: 14px; color: green">已出货，运输中</span>
+                  <span style="font-size: 14px; color: green">已发货</span>
                 <% elsif s_order.status == "Delivered" %>
                   <span style="font-size: 14px; color: green">已签收</span>
+                <% elsif s_order.status == "Completed" %>
+                  <span style="font-size: 14px; color: green">已完成</span>
+                <% elsif s_order.status == "Cancelled" %>
+                  <span style="font-size: 14px; color: darkred">已取消</span>  
                 <% end %>
               </div>
             </div>
           </div>
         </div>
       <% end %>
+    </div>
+  </div>
+
+  <div class="d-flex flex-column justify-content-center mt-4"
+    style="background-color: #F5F5F5; border-radius: 20px;">
+    <div class="mx-4" style="display: flex; flex-direction: column;">
+      <div class="d-flex ms-3 mt-4">
+        <div class="me-4" style="margin-top: 1px;">
+          <h5> 订单总额: </h5>
+        </div>
+
+        <div>
+          <h5 style="color: #01528A; font-size: 22px;">¥ <%= @order.deal_sum %> </h5>
+        </div>
+      </div>
+
+      <div class="ms-3 mt-2 mb-4">
+        <!-- cancel order & confirm complete -->
+        <% @s_orders = SOrder.where(order_id: @order.id) %>
+        <% @cancellable = true %>
+        <% @completable = true %>
+
+        <% @s_orders.each do |s_order| %>
+          <% if s_order.status != "Paid" %>
+            <!-- non-cancellable if anything shipped -->
+            <% @cancellable = false %>
+          <% end %>
+
+          <% if s_order.status != "Delivered" %>
+            <!-- non-completable if anything not delivered -->
+            <% @completable = false %>
+          <% end %>
+        <% end %>
+
+        <% if @completable %>
+          <%= link_to is_completed_order_path, style:"text-decoration: none;", method: :post do %>
+            <button class="btn" style="background-color: black;">   
+              <div>
+                <span style="color: white;"> 完成订单 </span>
+              </div>
+            </button>
+          <% end %>
+        <% else %>
+          <button class="btn disabled" style="background-color: grey; cursor: pointer;">   
+            <div>
+              <span style="color: white;"> 完成订单 </span>
+            </div>
+          </button>
+        <% end %>
+
+        <% if @cancellable %>
+          <%= link_to is_cancelled_order_path, method: :post do %>
+            <button class="btn ms-3" style="background-color: darkred;">   
+              <div>
+                <span style="color: white;"> 取消订单 </span>
+              </div>
+            </button>
+          <% end %>
+        <% else %>
+          <button class="btn disabled ms-3" style="background-color: grey; cursor: pointer;">   
+            <div>
+              <span style="color: white;"> 取消订单 </span>
+            </div>
+          </button>
+        <% end %>
+
+        
+      </div>
     </div>
   </div>
 </div>

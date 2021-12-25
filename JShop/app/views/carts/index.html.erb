@@ -5,65 +5,93 @@
     style="background-color: #F5F5F5; border-radius: 20px; width: 78%; margin-right: 2%;">
     <div class="m-4 mb-0 d-flex flex-column">
       <div class="d-flex flex-column mx-3 mt-3">
-        <% @owned_carts.each do |owned_cart| %>
-          <div class="d-flex" style="border-radius: 20px; margin-bottom: 40px;">
-            <% @cart_product = Product.find_by(id: owned_cart.product_id) %>
-            
-            <div>
-              <%= link_to @cart_product do %>
-                <% if @cart_product.image_dir.attached? %>
-                  <img src="<%= (url_for(@cart_product.image_dir)) %>" style="height: 15rem; width: 15rem; border-radius: 15px; border: 1px solid black;">
-                <% end %>
-              <% end %>
-            </div>
-
-            <div class="d-flex flex-column mx-4 my-1">
-              <div class="ms-1">
-                <%= link_to @cart_product, :style => "color: black; text-decoration: none;" do %>
-                  <h4><%= @cart_product.name %></h4>
+        <% if !@owned_carts.empty?%>
+          <% @owned_carts.each do |owned_cart| %>
+            <div class="d-flex" style="border-radius: 20px; margin-bottom: 40px;">
+              <% @cart_product = Product.find_by(id: owned_cart.product_id) %>
+              
+              <div>
+                <%= link_to @cart_product do %>
+                  <% if @cart_product.image_dir.attached? %>
+                    <img src="<%= (url_for(@cart_product.image_dir)) %>" style="height: 15rem; width: 15rem; border-radius: 15px; border: 1px solid black;">
+                  <% end %>
                 <% end %>
               </div>
 
-              <div class="mt-1 mb-1 ms-1">
-                <%= link_to @fav_product, :style => "color: black; text-decoration: none;" do %>
-                  <span style="font-size: 18px;"><%= @cart_product.description %></span>
-                <% end %>
-              </div>
+              <div class="d-flex flex-column mx-4 my-1">
+                <div class="ms-1">
+                  <%= link_to @cart_product, :style => "color: black; text-decoration: none;" do %>
+                    <h4><%= @cart_product.name %></h4>
+                  <% end %>
+                </div>
 
-              <div class="mt-1 ms-1">
-                <%= link_to @cart_product, :style => "color: black; text-decoration: none;" do %>
-                  <span style="font-size: 18px;">x<%= owned_cart.quantity %></span>
-                <% end %>
-              </div>
+                <div class="mt-1 mb-1 ms-1">
+                  <%= link_to @fav_product, :style => "color: black; text-decoration: none;" do %>
+                    <span style="font-size: 18px;"><%= @cart_product.description %></span>
+                  <% end %>
+                </div>
 
-              <div class="mt-2 ms-1">
-                <%= link_to @cart_product, :style => "color: black; text-decoration: none;" do %>
-                  <div class="d-flex">
-                    <h5 style="font-size: 17px; margin-top: 4px; margin-right: 5px;"> 单价：</h5>
-                    <span style="font-size: 18px;">¥ <%= (@cart_product.price).to_f %></span>
-                  </div>
-                <% end %>
-              </div>
+                <div class="mt-1 ms-1">
+                  <%= link_to @cart_product, :style => "color: black; text-decoration: none;" do %>
+                    <span style="font-size: 18px;">x<%= owned_cart.quantity %></span>
+                  <% end %>
+                </div>
 
-              <div class="mt-1 ms-1 mb-1">
-                <%= link_to @cart_product, :style => "color: black; text-decoration: none;" do %>
-                  <div class="d-flex">
-                    <h5 style="font-size: 17px; margin-top: 4px; margin-right: 5px;"> 总额：</h5>
-                    <span style="font-size: 18px;">¥ <%= (@cart_product.price * owned_cart.quantity).to_f %></span>
-                  </div>
-                <% end %>
-              </div>
-
-              <div class="mt-2">
-                <%= link_to owned_cart, method: :delete do %>
-                  <button class="btn" style="background-color:darkred;">
-                    <div>
-                      <%= image_tag 'bin.png', style: 'height:18px; width:18px;' %>
+                <div class="mt-2 ms-1">
+                  <%= link_to @cart_product, :style => "color: black; text-decoration: none;" do %>
+                    <div class="d-flex">
+                      <h5 style="font-size: 17px; margin-top: 4px; margin-right: 5px;"> 单价：</h5>
+                      <span style="font-size: 18px;">¥ <%= (@cart_product.price).to_f %></span>
                     </div>
-                  </button>
-                <% end %>
+                  <% end %>
+                </div>
+
+                <div class="mt-1 ms-1 mb-1">
+                  <%= link_to @cart_product, :style => "color: black; text-decoration: none;" do %>
+                    <div class="d-flex">
+                      <h5 style="font-size: 17px; margin-top: 4px; margin-right: 5px;"> 总额：</h5>
+                      <span style="font-size: 18px;">¥ <%= (@cart_product.price * owned_cart.quantity).to_f %></span>
+                    </div>
+                  <% end %>
+                </div>
+
+                <div class="d-flex">
+                  <div class="mt-2 me-2">
+                    <%= link_to inc_one_cart_path(id: owned_cart.id), method: :post do %>
+                      <button class="btn" style="background-color: grey; height: 40px; width: 43px;">
+                        <div>
+                          <h5 style="color: white;"> + </h5>
+                        </div>
+                      </button>
+                    <% end %>
+                  </div>
+
+                  <div class="mt-2 me-2">
+                    <%= link_to dec_one_cart_path(id: owned_cart.id), method: :post do %>
+                      <button class="btn" style="background-color: grey; height: 40px; width: 43px;">
+                        <div>
+                          <h5 style="color: white;"> - </h5>
+                        </div>
+                      </button>
+                    <% end %>
+                  </div>
+
+                  <div class="mt-2">
+                    <%= link_to owned_cart, method: :delete do %>
+                      <button class="btn" style="background-color:darkred; height: 40px; width: 43px;">
+                        <div>
+                          <%= image_tag 'bin.png', style: 'height:18px; width:18px;' %>
+                        </div>
+                      </button>
+                    <% end %>
+                  </div>
+                </div>
               </div>
             </div>
+          <% end %>
+        <% else %>
+          <div class="ms-5 mb-5">
+            <span style="color: grey; font-size: 17px;"> 您还未有订单。</span>
           </div>
         <% end %>
       </div>
