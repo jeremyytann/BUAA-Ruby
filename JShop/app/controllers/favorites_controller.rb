@@ -35,7 +35,8 @@ class FavoritesController < ApplicationController
 
     respond_to do |format|
       if @favorite.save
-        return
+        @product = Product.find_by(id: params[:product_id])
+        format.html { redirect_to @product, notice: "Favorite was successfully updated." }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @favorite.errors, status: :unprocessable_entity }

@@ -3,23 +3,38 @@
     <div class="d-flex flex-column" style="border-radius: 20px; background-color: #F5F5F5;">
       <% @shop_owner = User.find_by(id: @shop.user_id) %>
       <div class="d-flex justify-content-center mt-4">
-        <div>
-          <h4> <%= @shop_owner.username %> </h4>
+        <h4> <%= @shop_owner.username %> </h4>
+      </div>
+
+      <div class="d-flex justify-content-center mb-2">
+        <span style="font-size: 14px; color: grey;"> <%= @shop_owner.created_at %> </span>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <div class="d-flex mt-2 mb-1">
+          <h5 class="mt-1 me-3" style="font-size: 15px;"> 商品数: </h5>
+          <!-- get followship counts -->
+          <% @product_count = Product.where(user_id: @shop.user_id).count %>
+          <span style="font-size: 16px; margin-top: 1px;"> <%= @product_count %> </span>
         </div>
       </div>
 
       <div class="d-flex justify-content-center">
-        <div>
-          <%= @shop_owner.created_at %>
-        </div>
-      </div>
-
-      <div class="d-flex justify-content-center">
-        <div class="d-flex mt-2 mb-2">
+        <div class="d-flex mb-1">
           <h5 class="mt-1 me-3" style="font-size: 15px;"> 关注人数: </h5>
           <!-- get followship counts -->
           <% @following_count = Followship.where(shop_id: @shop.id).count %>
           <span style="font-size: 16px; margin-top: 1px;"> <%= @following_count %> </span>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <div class="d-flex mb-3">
+          <h5 class="mt-1 me-3" style="font-size: 15px;"> 评价: </h5>
+          <!-- get avg rating -->
+          <% @comments = Comment.where(seller_id: @shop.user_id) %>
+          <% @average_rating = @comments.sum("rating").to_f / @comments.count.to_f %>
+          <span style="font-size: 16px; margin-top: 1px;"> <%= @average_rating %> 星</span>
         </div>
       </div>
 
@@ -125,7 +140,7 @@
 
       <!-- Tab panes -->
       <div class="tab-content">
-        <div class="tab-pane ms-3 mt-3 active" id="home">
+        <div class="tab-pane ms-3 mt-3 fade show active" id="home">
           <!-- topsales products && latest products -->
           <div class="mb-4" style="margin-top: 35px;">
             <h3> 热销榜 </h3>

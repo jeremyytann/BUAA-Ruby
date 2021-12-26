@@ -27,13 +27,17 @@
             <% end %>
           </div>
         <% else %>
-          <%= link_to new_user_session_path, method: :get do %>
-              <button class="btn btn-outline-dark" type="submit" style="margin-right: 20px; text-decoration: none !important;">登录</button>
-          <% end %>
+          <div style="margin-right: 20px; text-decoration: none !important;">
+            <%= link_to new_user_session_path, method: :get do %>
+                <button class="btn btn-outline-dark" type="submit">登录</button>
+            <% end %>
+          </div>
 
-          <%= link_to new_user_registration_path, method: :get do %>
-              <button class="btn btn-secondary" type="submit" style="margin-right: 20px">注册</button>
-          <% end %>
+          <div style="margin-right: 20px; text-decoration: none !important;">
+            <%= link_to new_user_registration_path, method: :get do %>
+                <button class="btn btn-secondary" type="submit">注册</button>
+            <% end %>
+          </div>
         <% end %>
       </div>
     </nav>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_25_115735) do
+ActiveRecord::Schema.define(version: 2021_12_26_083018) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -48,6 +48,20 @@ ActiveRecord::Schema.define(version: 2021_12_25_115735) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["product_id"], name: "index_carts_on_product_id"
     t.index ["user_id"], name: "index_carts_on_user_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "user_id", null: false
+    t.integer "s_order_id", null: false
+    t.text "description"
+    t.integer "rating"
+    t.integer "seller_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["product_id"], name: "index_comments_on_product_id"
+    t.index ["s_order_id"], name: "index_comments_on_s_order_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "deliveries", force: :cascade do |t|
@@ -143,6 +157,9 @@ ActiveRecord::Schema.define(version: 2021_12_25_115735) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "carts", "products"
   add_foreign_key "carts", "users"
+  add_foreign_key "comments", "products"
+  add_foreign_key "comments", "s_orders"
+  add_foreign_key "comments", "users"
   add_foreign_key "deliveries", "s_orders"
   add_foreign_key "favorites", "products"
   add_foreign_key "favorites", "users"

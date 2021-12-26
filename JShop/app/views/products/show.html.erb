@@ -159,7 +159,7 @@
    </div>
   </div>
 
-  <div class="d-flex flex-column mb-5"
+  <div class="d-flex flex-column mb-4"
     style="background-color: #F5F5F5; border-radius: 20px;">
     <div class="m-4 mb-2 d-flex flex-column">
       <div class="mb-4 d-flex align-items-center">
@@ -180,7 +180,7 @@
         </div>
       </div>
 
-      <h4>商品详情</h4>
+      <h4 style="font-size: 20px;">商品详情</h4>
 
       <p class="mt-2">
         <strong>收藏人数：</strong>
@@ -193,10 +193,333 @@
       </p>
 
 
-      <h4 class="mt-4">商品描述</h4>
+      <h4 class="mt-4" style="font-size: 20px;">商品描述</h4>
       <p class="mt-2">
         <%= @product.description %>
       </p>
+    </div>
+  </div>
+
+  <div class="d-flex flex-column mb-5"
+    style="background-color: #F5F5F5; border-radius: 20px;">
+    <div class="m-4 mb-2 d-flex flex-column">
+      <div class="mb-2">
+        <h4 style="font-size: 20px;">商品评价</h4>
+
+        <% @comments = Comment.where(product_id: @product.id) %>
+        <% @five_comments = Comment.where(product_id: @product.id, rating: 5) %>
+        <% @four_comments = Comment.where(product_id: @product.id, rating: 4) %>
+        <% @three_comments = Comment.where(product_id: @product.id, rating: 3) %>
+        <% @two_comments = Comment.where(product_id: @product.id, rating: 2) %>
+        <% @one_comments = Comment.where(product_id: @product.id, rating: 1) %>
+
+        <% if @comments.empty? %>
+          <div class="mt-3 mb-2">
+            <span style="color:grey; font-size: 14px;"> 此商品目前还未有任何评价。 </span>
+          </div>
+        <% else %>
+          <div class="mt-3 mb-2">
+            <div class="d-flex flex-column">
+              
+              
+              <div class="d-flex align-items-center">
+                <div class="me-3">
+                  <span style="font-size: 13px;"> 5 星 </span>
+                </div>
+
+                <div class="progress" style="width: 300px; height: 10px; margin-top: 1px;">
+                  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: <%= number_to_percentage(@five_comments.count.to_f / @comments.count.to_f * 100) %>"></div>
+                </div>
+
+                <span class="ms-2" style="font-size: 13px; color: grey;"> (<%= @five_comments.count %>) </span>
+              </div>
+
+              <div class="d-flex align-items-center">
+                <div class="me-3">
+                  <span style="font-size: 13px;"> 4 星 </span>
+                </div>
+
+                <div class="progress" style="width: 300px; height: 10px; margin-top: 1px;">
+                  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: <%= number_to_percentage(@four_comments.count.to_f / @comments.count.to_f * 100) %>"></div>
+                </div>
+
+                <span class="ms-2" style="font-size: 13px; color: grey;"> (<%= @four_comments.count %>) </span>
+              </div>
+
+              <div class="d-flex align-items-center">
+                <div class="me-3">
+                  <span style="font-size: 13px;"> 3 星 </span>
+                </div>
+
+                <div class="progress" style="width: 300px; height: 10px; margin-top: 1px;">
+                  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: <%= number_to_percentage(@three_comments.count.to_f / @comments.count.to_f * 100) %>"></div>
+                </div>
+
+                <span class="ms-2" style="font-size: 13px; color: grey;"> (<%= @three_comments.count %>) </span>
+              </div>
+
+              <div class="d-flex align-items-center">
+                <div class="me-3">
+                  <span style="font-size: 13px;"> 2 星 </span>
+                </div>
+
+                <div class="progress" style="width: 300px; height: 10px; margin-top: 1px;">
+                  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: <%= number_to_percentage(@two_comments.count.to_f / @comments.count.to_f * 100) %>"></div>
+                </div>
+
+                <span class="ms-2" style="font-size: 13px; color: grey;"> (<%= @two_comments.count %>) </span>
+              </div>
+
+              <div class="d-flex align-items-center">
+                <div class="me-3">
+                  <span style="font-size: 13px;"> 1 星 </span>
+                </div>
+
+                <div class="progress" style="width: 300px; height: 10px; margin-top: 1px;">
+                  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: <%= number_to_percentage(@one_comments.count.to_f / @comments.count.to_f * 100) %>"></div>
+                </div>
+              </div>
+
+              <div class="mt-4">
+                <!-- comments filter areas -->
+                <ul class="nav nav-pills">
+                  <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="pill" href="#home">全部</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link ms-2" data-bs-toggle="pill" href="#menu1">5 星</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link ms-2" data-bs-toggle="pill" href="#menu2">4 星</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link ms-2" data-bs-toggle="pill" href="#menu3">3 星</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link ms-2" data-bs-toggle="pill" href="#menu4">2 星</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link ms-2" data-bs-toggle="pill" href="#menu5">1 星</a>
+                  </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                  <div class="tab-pane ms-2 me-2 mb-3 fade show active" id="home">
+                    <% @top_comments = @comments.first(10) %>
+
+                    <% @top_comments.each do |comment| %>
+                      <div class="d-flex" style="background-color: white; border-radius: 20px; margin-top: 30px; height: auto; min-width: 450px">
+                        <div class="d-flex flex-column m-4 my-3" style="min-width: 500px;">
+                          <h5 style="font-size: 18px;"><%= User.find_by(id: comment.user_id).username %></h5>
+
+                          <div class="d-flex mb-3">
+                            <% count = 1 %>
+                            <% while count <= comment.rating do %>
+                              <%= image_tag 'color-star.png', style: 'height:18px; width:18px; margin-right: 3px;' %>
+                              <% count = count + 1 %>
+                            <% end %>
+
+                            <% while count <= 5 do %>
+                              <%= image_tag 'star.png', style: 'height:18px; width:18px; margin-right: 3px;' %>
+                              <% count = count + 1 %>
+                            <% end %>
+                          </div>
+                          <span class="mb-2" style="color: black;"><%= comment.description %></span>
+                          <span style="font-size: 14px; color: grey;"> <%= comment.created_at %> </span>
+                        </div>
+
+                        <div class="mt-3" style="margin-left: 20px;">
+                          <button class="btn" style="background-color: darkred; cursor: default;"> 
+                            <div>
+                              <%= image_tag 'report.png', style: 'height:23px; width:23px;' %>
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+
+                  <div class="tab-pane ms-2 me-2 mb-3 fade" id="menu1">
+                    <% @top_comments = @five_comments.first(10) %>
+
+                    <% @top_comments.each do |comment| %>
+                      <div class="d-flex" style="background-color: white; border-radius: 20px; margin-top: 30px; height: auto; min-width: 450px">
+                        <div class="d-flex flex-column m-4 my-3" style="min-width: 500px;">
+                          <h5 style="font-size: 18px;"><%= User.find_by(id: comment.user_id).username %></h5>
+
+                          <div class="d-flex mb-3">
+                            <% count = 1 %>
+                            <% while count <= comment.rating do %>
+                              <%= image_tag 'color-star.png', style: 'height:18px; width:18px; margin-right: 3px;' %>
+                              <% count = count + 1 %>
+                            <% end %>
+
+                            <% while count <= 5 do %>
+                              <%= image_tag 'star.png', style: 'height:18px; width:18px; margin-right: 3px;' %>
+                              <% count = count + 1 %>
+                            <% end %>
+                          </div>
+                          <span class="mb-2" style="color: black;"><%= comment.description %></span>
+                          <span style="font-size: 14px; color: grey;"> <%= comment.created_at %> </span>
+                        </div>
+
+                        <div class="mt-3" style="margin-left: 20px;">
+                          <button class="btn" style="background-color: darkred; cursor: default;"> 
+                            <div>
+                              <%= image_tag 'report.png', style: 'height:23px; width:23px;' %>
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+
+                  <div class="tab-pane ms-2 me-2 mb-3 fade" id="menu2">
+                    <% @top_comments = @four_comments.first(10) %>
+
+                    <% @top_comments.each do |comment| %>
+                      <div class="d-flex" style="background-color: white; border-radius: 20px; margin-top: 30px; height: auto; min-width: 450px">
+                        <div class="d-flex flex-column m-4 my-3" style="min-width: 500px;">
+                          <h5 style="font-size: 18px;"><%= User.find_by(id: comment.user_id).username %></h5>
+
+                          <div class="d-flex mb-3">
+                            <% count = 1 %>
+                            <% while count <= comment.rating do %>
+                              <%= image_tag 'color-star.png', style: 'height:18px; width:18px; margin-right: 3px;' %>
+                              <% count = count + 1 %>
+                            <% end %>
+
+                            <% while count <= 5 do %>
+                              <%= image_tag 'star.png', style: 'height:18px; width:18px; margin-right: 3px;' %>
+                              <% count = count + 1 %>
+                            <% end %>
+                          </div>
+                          <span class="mb-2" style="color: black;"><%= comment.description %></span>
+                          <span style="font-size: 14px; color: grey;"> <%= comment.created_at %> </span>
+                        </div>
+
+                        <div class="mt-3" style="margin-left: 20px;">
+                          <button class="btn" style="background-color: darkred; cursor: default;"> 
+                            <div>
+                              <%= image_tag 'report.png', style: 'height:23px; width:23px;' %>
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+
+                  <div class="tab-pane ms-2 me-2 mb-3 fade" id="menu3">
+                    <% @top_comments = @three_comments.first(10) %>
+
+                    <% @top_comments.each do |comment| %>
+                      <div class="d-flex" style="background-color: white; border-radius: 20px; margin-top: 30px; height: auto; min-width: 450px">
+                        <div class="d-flex flex-column m-4 my-3" style="min-width: 500px;">
+                          <h5 style="font-size: 18px;"><%= User.find_by(id: comment.user_id).username %></h5>
+
+                          <div class="d-flex mb-3">
+                            <% count = 1 %>
+                            <% while count <= comment.rating do %>
+                              <%= image_tag 'color-star.png', style: 'height:18px; width:18px; margin-right: 3px;' %>
+                              <% count = count + 1 %>
+                            <% end %>
+
+                            <% while count <= 5 do %>
+                              <%= image_tag 'star.png', style: 'height:18px; width:18px; margin-right: 3px;' %>
+                              <% count = count + 1 %>
+                            <% end %>
+                          </div>
+                          <span class="mb-2" style="color: black;"><%= comment.description %></span>
+                          <span style="font-size: 14px; color: grey;"> <%= comment.created_at %> </span>
+                        </div>
+
+                        <div class="mt-3" style="margin-left: 20px;">
+                          <button class="btn" style="background-color: darkred; cursor: default;"> 
+                            <div>
+                              <%= image_tag 'report.png', style: 'height:23px; width:23px;' %>
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+
+                  <div class="tab-pane ms-2 me-2 mb-3 fade" id="menu4">
+                    <% @top_comments = @two_comments.first(10) %>
+
+                    <% @top_comments.each do |comment| %>
+                      <div class="d-flex" style="background-color: white; border-radius: 20px; margin-top: 30px; height: auto; min-width: 450px">
+                        <div class="d-flex flex-column m-4 my-3" style="min-width: 500px;">
+                          <h5 style="font-size: 18px;"><%= User.find_by(id: comment.user_id).username %></h5>
+
+                          <div class="d-flex mb-3">
+                            <% count = 1 %>
+                            <% while count <= comment.rating do %>
+                              <%= image_tag 'color-star.png', style: 'height:18px; width:18px; margin-right: 3px;' %>
+                              <% count = count + 1 %>
+                            <% end %>
+
+                            <% while count <= 5 do %>
+                              <%= image_tag 'star.png', style: 'height:18px; width:18px; margin-right: 3px;' %>
+                              <% count = count + 1 %>
+                            <% end %>
+                          </div>
+                          <span class="mb-2" style="color: black;"><%= comment.description %></span>
+                          <span style="font-size: 14px; color: grey;"> <%= comment.created_at %> </span>
+                        </div>
+
+                        <div class="mt-3" style="margin-left: 20px;">
+                          <button class="btn" style="background-color: darkred; cursor: default;"> 
+                            <div>
+                              <%= image_tag 'report.png', style: 'height:23px; width:23px;' %>
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+
+                  <div class="tab-pane ms-2 me-2 mb-3 fade" id="menu5">
+                    <% @top_comments = @one_comments.first(10) %>
+
+                    <% @top_comments.each do |comment| %>
+                      <div class="d-flex" style="background-color: white; border-radius: 20px; margin-top: 30px; height: auto; min-width: 450px">
+                        <div class="d-flex flex-column m-4 my-3" style="min-width: 500px;">
+                          <h5 style="font-size: 18px;"><%= User.find_by(id: comment.user_id).username %></h5>
+
+                          <div class="d-flex mb-3">
+                            <% count = 1 %>
+                            <% while count <= comment.rating do %>
+                              <%= image_tag 'color-star.png', style: 'height:18px; width:18px; margin-right: 3px;' %>
+                              <% count = count + 1 %>
+                            <% end %>
+
+                            <% while count <= 5 do %>
+                              <%= image_tag 'star.png', style: 'height:18px; width:18px; margin-right: 3px;' %>
+                              <% count = count + 1 %>
+                            <% end %>
+                          </div>
+                          <span class="mb-2" style="color: black;"><%= comment.description %></span>
+                          <span style="font-size: 14px; color: grey;"> <%= comment.created_at %> </span>
+                        </div>
+
+                        <div class="mt-3" style="margin-left: 20px;">
+                          <button class="btn" style="background-color: darkred; cursor: default;"> 
+                            <div>
+                              <%= image_tag 'report.png', style: 'height:23px; width:23px;' %>
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
