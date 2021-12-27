@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_many :orders, dependent: :destroy
   has_one :shop, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :followships, dependent: :destroy
 
   validates :username, presence: true, uniqueness: { case_sensitive: false }
   validates_format_of :username, with: /^[a-zA-Z0-9_\.]*$/, :multiline => true

@@ -85,40 +85,6 @@
             <% end %>
           <% end %>
         </div>
-
-        <div class="d-flex">
-          <% if user_signed_in? %>
-            <% if current_user.role == 1 %>
-              
-                <button class="btn" style="background-color: darkred;"> 
-                  <div>
-                    <span style="color: white;"> 举报 </span>
-                  </div>
-                </button>
-
-            <% elsif current_user.role == 2 %>
-              <button class="btn" style="background-color: darkred;"> 
-                <div>
-                  <span style="color: white;"> 举报 </span>
-                </div>
-              </button>
-            <% elsif current_user.role == 3 %>
-              <button class="btn" style="background-color: darkred;"> 
-                <div>
-                  <span style="color: white;"> 举报 </span>
-                </div>
-              </button>
-            <% end %>
-          <% else %>
-            <%= link_to new_user_session_path, method: :get do %>
-              <button class="btn" style="background-color: darkred;"> 
-                <div>
-                  <span style="color: white;"> 举报 </span>
-                </div>
-              </button>
-            <% end %>
-          <% end %>
-        </div>
       </div>
     </div>
   </div>
@@ -147,7 +113,7 @@
           </div>
 
           <% @shop_products = Product.where(user_id: @shop.user_id) %>
-          <% @ranked_products = (@shop_products.sort_by &:sales).first(10) %>
+          <% @ranked_products = (@shop_products.sort_by &:sales).reverse.first(10) %>
           <div class="d-flex flex-column mt-2">
             <% count = 1 %>
             <% @ranked_products.each do |ranked_product| %>
