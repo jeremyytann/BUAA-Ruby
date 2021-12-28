@@ -57,7 +57,7 @@ class OrdersController < ApplicationController
 
     @owner_carts.each do |owned_cart|
       @cart_product = Product.find_by(id: owned_cart.product_id)
-      @cart_product.update(sales: @cart_product.sales + 1)
+      @cart_product.update(sales: @cart_product.sales + owned_cart.quantity)
       @new_order = SOrder.create(user_id: current_user.id, product_id: owned_cart.product_id, quantity: owned_cart.quantity, price: (@cart_product.price * owned_cart.quantity).to_f, seller_id: @cart_product.user_id, order: @order, status: "Paid")
     end
 
